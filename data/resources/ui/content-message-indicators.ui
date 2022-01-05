@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="ContentMessageIndicators" parent="GtkWidget">
+    <property name="layout-manager">
+      <object class="GtkBoxLayout"/>
+    </property>
+    <style>
+      <class name="message-indicators"/>
+    </style>
+    <child>
+      <object class="GtkLabel" id="timestamp"/>
+    </child>
+  </template>
+</interface>

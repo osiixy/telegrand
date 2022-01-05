@@ -3,7 +3,10 @@ use gtk::{gdk, gio, glib, prelude::*, subclass::prelude::*, CompositeTemplate};
 use tdgrand::{enums::MessageContent, types::File};
 
 use crate::session::chat::Message;
-use crate::session::content::{message_row::StickerPaintable, MessageRow, MessageRowExt};
+use crate::session::content::{
+    message_row::{MessageIndicators, StickerPaintable},
+    MessageRow, MessageRowExt,
+};
 
 mod imp {
     use super::*;
@@ -24,6 +27,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             Self::bind_template(klass);
+            MessageIndicators::static_type();
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {

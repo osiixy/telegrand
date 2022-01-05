@@ -30,6 +30,14 @@
             </style>
           </object>
         </child>
+        <child>
+          <object class="ContentMessageIndicators">
+            <property name="halign">end</property>
+            <binding name="message">
+              <lookup name="message">ContentMessageText</lookup>
+            </binding>
+          </object>
+        </child>
       </object>
     </property>
   </template>

@@ -1,3 +1,4 @@
+mod indicators;
 mod media;
 mod media_picture;
 mod photo;
@@ -5,6 +6,7 @@ mod sticker;
 mod sticker_paintable;
 mod text;
 
+pub use self::indicators::MessageIndicators;
 use self::media::Media;
 use self::media_picture::MediaPicture;
 pub use self::photo::MessagePhoto;

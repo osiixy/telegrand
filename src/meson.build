@@ -52,6 +52,7 @@ rust_sources = files(
   'session/content/item_row.rs',
   'session/content/mod.rs',
   'session/content/user_dialog.rs',
+  'session/content/message_row/indicators.rs',
   'session/content/message_row/media.rs',
   'session/content/message_row/media_picture.rs',
   'session/content/message_row/mod.rs',

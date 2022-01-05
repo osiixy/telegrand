@@ -140,6 +140,24 @@
   font-size: 0.95em;
 }
 
+.message-indicators label {
+  font-size: 0.8em;
+}
+
+.message-bubble .message-indicators label {
+  opacity: 0.75;
+}
+
+.message-bubble:not(.outgoing) .message-indicators label {
+  opacity: 0.55;
+}
+
+.message-sticker .message-indicators {
+  background-color: alpha(@view_bg_color, 0.9);
+  border-radius: 9999px;
+  padding: 2px 4px 0;
+}
+
 .chat-action-bar entry {
   padding: 0;
 }

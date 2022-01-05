@@ -4,7 +4,7 @@ use tdgrand::enums::MessageContent;
 
 use crate::session::{
     chat::{BoxedMessageContent, Message, MessageSender, SponsoredMessage},
-    content::{MessageRow, MessageRowExt},
+    content::{message_row::MessageIndicators, MessageRow, MessageRowExt},
     Chat, ChatType,
 };
 use crate::utils::parse_formatted_text;
@@ -32,6 +32,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             Self::bind_template(klass);
+            MessageIndicators::static_type();
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {

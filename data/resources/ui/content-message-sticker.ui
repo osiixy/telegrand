@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="ContentMessageSticker" parent="ContentMessageRow">
+    <style>
+      <class name="message-sticker"/>
+    </style>
     <property name="content">
-      <object class="GtkPicture" id="picture"/>
+      <object class="GtkOverlay" id="overlay">
+        <child type="overlay">
+          <object class="ContentMessageIndicators" id="indicators">
+            <binding name="message">
+              <lookup name="message">ContentMessageSticker</lookup>
+            </binding>
+            <property name="halign">end</property>
+            <property name="valign">end</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPicture" id="picture"/>
+        </child>
+      </object>
     </property>
   </template>
 </interface>
