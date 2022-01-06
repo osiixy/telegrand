@@ -1,29 +1,32 @@
-use gtk::{gdk, glib, prelude::*, subclass::prelude::*, CompositeTemplate};
+use glib::{clone, closure};
+use gtk::{gdk, gio, glib, prelude::*, subclass::prelude::*, CompositeTemplate};
+use tdgrand::{enums::MessageContent, types::File};
 
-use crate::session::content::message_row::MediaPicture;
+use crate::session::chat::{BoxedMessageContent, Message};
+use crate::session::content::{message_row::MessageMediaContent, MessageRow, MessageRowExt};
+use crate::utils::parse_formatted_text;
+use crate::Session;
 
 mod imp {
     use super::*;
-    use once_cell::sync::Lazy;
+    use glib::WeakRef;
+    use std::cell::RefCell;
 
     #[derive(Debug, Default, CompositeTemplate)]
     #[template(resource = "/com/github/melix99/telegrand/ui/content-message-media.ui")]
-    pub struct Media {
+    pub struct MessageMedia {
+        pub binding: RefCell<Option<gtk::ExpressionWatch>>,
+        pub handler_id: RefCell<Option<glib::SignalHandlerId>>,
+        pub old_message: WeakRef<glib::Object>,
         #[template_child]
-        pub content: TemplateChild<gtk::Box>,
-        #[template_child]
-        pub picture: TemplateChild<MediaPicture>,
-        #[template_child]
-        pub caption_label: TemplateChild<gtk::Label>,
-        #[template_child]
-        pub progress_bar: TemplateChild<gtk::ProgressBar>,
+        pub content: TemplateChild<MessageMediaContent>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for Media {
+    impl ObjectSubclass for MessageMedia {
         const NAME: &'static str = "ContentMessageMedia";
-        type Type = super::Media;
-        type ParentType = gtk::Widget;
+        type Type = super::MessageMedia;
+        type ParentType = MessageRow;
 
         fn class_init(klass: &mut Self::Class) {
             Self::bind_template(klass);
@@ -34,159 +37,110 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for Media {
-        fn properties() -> &'static [glib::ParamSpec] {
-            static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
-                vec![
-                    glib::ParamSpecString::new(
-                        "caption",
-                        "Caption",
-                        "The caption",
-                        None,
-                        glib::ParamFlags::READWRITE | glib::ParamFlags::EXPLICIT_NOTIFY,
-                    ),
-                    glib::ParamSpecDouble::new(
-                        "download-progress",
-                        "Download Progress",
-                        "The download progress",
-                        0.0,
-                        1.0,
-                        0.0,
-                        glib::ParamFlags::READWRITE | glib::ParamFlags::EXPLICIT_NOTIFY,
-                    ),
-                ]
-            });
-            PROPERTIES.as_ref()
-        }
-
-        fn set_property(
-            &self,
-            obj: &Self::Type,
-            _id: usize,
-            value: &glib::Value,
-            pspec: &glib::ParamSpec,
-        ) {
-            match pspec.name() {
-                "caption" => obj.set_caption(value.get().unwrap()),
-                "download-progress" => obj.set_download_progress(value.get().unwrap()),
-                _ => unimplemented!(),
-            }
-        }
-
-        fn property(&self, obj: &Self::Type, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-            match pspec.name() {
-                "caption" => obj.caption().to_value(),
-                "download-progress" => obj.download_progress().to_value(),
-                _ => unimplemented!(),
-            }
-        }
-
-        fn dispose(&self, _obj: &Self::Type) {
-            self.content.unparent();
+    impl ObjectImpl for MessageMedia {
+        fn constructed(&self, obj: &Self::Type) {
+            self.parent_constructed(obj);
+            obj.connect_message_notify(|obj, _| obj.update_widget());
         }
     }
 
-    impl WidgetImpl for Media {
-        fn measure(
-            &self,
-            _widget: &Self::Type,
-            orientation: gtk::Orientation,
-            for_size: i32,
-        ) -> (i32, i32, i32, i32) {
-            if let gtk::Orientation::Horizontal = orientation {
-                let (mut minimum, mut natural, minimum_baseline, natural_baseline) =
-                    self.content.measure(orientation, for_size);
-
-                if for_size == -1 {
-                    let (_, media_default_width, _, _) =
-                        self.picture.measure(gtk::Orientation::Horizontal, -1);
-                    minimum = minimum.min(media_default_width);
-                    natural = media_default_width;
-                }
-
-                (minimum, natural, minimum_baseline, natural_baseline)
-            } else {
-                let for_size = if for_size == -1 {
-                    let (_, media_default_width, _, _) =
-                        self.picture.measure(gtk::Orientation::Horizontal, -1);
-                    media_default_width
-                } else {
-                    for_size
-                };
-
-                self.content.measure(orientation, for_size)
-            }
-        }
-
-        fn size_allocate(&self, _widget: &Self::Type, width: i32, height: i32, baseline: i32) {
-            self.content.allocate(width, height, baseline, None);
-        }
-
-        fn request_mode(&self, _widget: &Self::Type) -> gtk::SizeRequestMode {
-            gtk::SizeRequestMode::HeightForWidth
-        }
-    }
+    impl WidgetImpl for MessageMedia {}
 }
 
 glib::wrapper! {
-    pub struct Media(ObjectSubclass<imp::Media>)
-        @extends gtk::Widget;
+    pub struct MessageMedia(ObjectSubclass<imp::MessageMedia>)
+        @extends gtk::Widget, MessageRow;
 }
 
-impl Default for Media {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl Media {
-    pub fn new() -> Self {
-        glib::Object::new(&[]).expect("Failed to create Media")
-    }
-
-    pub fn set_aspect_ratio(&self, aspect_ratio: f64) {
-        self.imp().picture.set_aspect_ratio(aspect_ratio);
-    }
-
-    pub fn set_paintable(&self, paintable: Option<gdk::Paintable>) {
-        self.imp().picture.set_paintable(paintable);
-    }
-
-    pub fn caption(&self) -> String {
-        self.imp().caption_label.label().into()
-    }
-
-    pub fn set_caption(&self, caption: &str) {
-        if self.caption() == caption {
-            return;
-        }
-
+impl MessageMedia {
+    fn update_widget(&self) {
         let imp = self.imp();
-        if caption.is_empty() {
-            imp.caption_label.set_visible(false);
-            self.remove_css_class("with-caption");
-        } else {
-            imp.caption_label.set_visible(true);
-            self.add_css_class("with-caption");
+
+        if let Some(binding) = imp.binding.take() {
+            binding.unwatch();
         }
 
-        imp.caption_label.set_label(caption);
-        self.notify("caption");
-    }
-
-    pub fn download_progress(&self) -> f64 {
-        self.imp().progress_bar.fraction()
-    }
-
-    pub fn set_download_progress(&self, progress: f64) {
-        if self.download_progress() == progress {
-            return;
+        if let Some(old_message) = imp.old_message.upgrade() {
+            if let Some(id) = imp.handler_id.take() {
+                old_message.disconnect(id);
+            }
         }
 
-        let imp = self.imp();
-        imp.progress_bar.set_fraction(progress);
-        imp.progress_bar.set_visible(progress < 1.0);
+        if let Some(message) = self.message() {
+            let message = message.downcast_ref::<Message>().unwrap();
 
-        self.notify("download-progress");
+            // Setup caption expression
+            let caption_binding = Message::this_expression("content")
+                .chain_closure::<String>(closure!(|_: Message, content: BoxedMessageContent| {
+                    if let MessageContent::MessagePhoto(data) = content.0 {
+                        parse_formatted_text(data.caption)
+                    } else {
+                        unreachable!();
+                    }
+                }))
+                .bind(&*imp.content, "caption", Some(message));
+            imp.binding.replace(Some(caption_binding));
+
+            // Load media
+            let handler_id =
+                message.connect_content_notify(clone!(@weak self as obj => move |message, _| {
+                    obj.update_media(message);
+                }));
+            imp.handler_id.replace(Some(handler_id));
+            self.update_media(message);
+        }
+
+        imp.old_message.set(self.message().as_ref());
+    }
+
+    fn update_media(&self, message: &Message) {
+        if let MessageContent::MessagePhoto(data) = message.content().0 {
+            if let Some(photo_size) = data.photo.sizes.last() {
+                let imp = self.imp();
+
+                // Reset media widget
+                imp.content.set_paintable(None);
+                imp.content
+                    .set_aspect_ratio(photo_size.width as f64 / photo_size.height as f64);
+
+                if photo_size.photo.local.is_downloading_completed {
+                    imp.content.set_download_progress(1.0);
+                    self.load_media_from_path(&photo_size.photo.local.path);
+                } else {
+                    imp.content.set_download_progress(0.0);
+                    self.download_media(photo_size.photo.id, &message.chat().session());
+                }
+            }
+        }
+    }
+
+    fn download_media(&self, file_id: i32, session: &Session) {
+        let (sender, receiver) = glib::MainContext::sync_channel::<File>(Default::default(), 5);
+
+        receiver.attach(
+            None,
+            clone!(@weak self as obj => @default-return glib::Continue(false), move |file| {
+                if file.local.is_downloading_completed {
+                    obj.imp().content.set_download_progress(1.0);
+                    obj.load_media_from_path(&file.local.path);
+                } else {
+                    let progress = file.local.downloaded_size as f64 / file.expected_size as f64;
+                    obj.imp().content.set_download_progress(progress);
+                }
+
+                glib::Continue(true)
+            }),
+        );
+
+        session.download_file(file_id, sender);
+    }
+
+    fn load_media_from_path(&self, path: &str) {
+        // TODO: Consider changing this to use an async api when
+        // https://github.com/gtk-rs/gtk4-rs/pull/777 is merged
+        let file = gio::File::for_path(path);
+        self.imp()
+            .content
+            .set_paintable(Some(gdk::Texture::from_file(&file).unwrap().upcast()));
     }
 }
