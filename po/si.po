@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: telegrand\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-03 22:56+0100\n"
+"POT-Creation-Date: 2022-01-07 00:12+0100\n"
 "PO-Revision-Date: 2021-11-26 18:54+0000\n"
 "Last-Translator: HelaBasa <R45XvezA@protonmail.ch>\n"
 "Language-Team: Sinhala <https://hosted.weblate.org/projects/telegrand/"
@@ -257,41 +257,41 @@ msgstr "_යතුරුපුවරුවේ කෙටිමං"
 msgid "_About Telegrand"
 msgstr "_ටෙලිග්‍රෑන්ඩ් ගැන"
 
-#: src/window.rs:334 src/session/sidebar/row.rs:613
+#: src/window.rs:331 src/session/sidebar/row.rs:615
 msgid "Incoming call"
 msgstr ""
 
-#: src/window.rs:426 src/session/sidebar/row.rs:500
-#: src/session/sidebar/row.rs:629
+#: src/window.rs:423 src/session/sidebar/row.rs:500
+#: src/session/sidebar/row.rs:631
 msgid "Sticker"
 msgstr ""
 
-#: src/window.rs:430 src/session/sidebar/row.rs:679
+#: src/window.rs:427 src/session/sidebar/row.rs:681
 msgid "Photo"
 msgstr ""
 
-#: src/window.rs:449 src/session/sidebar/row.rs:642
+#: src/window.rs:446 src/session/sidebar/row.rs:644
 msgid "GIF"
 msgstr "චලරූ"
 
-#: src/window.rs:458 src/session/sidebar/row.rs:691
+#: src/window.rs:455 src/session/sidebar/row.rs:693
 msgid "Video"
 msgstr "දෘශ්‍යකය"
 
-#: src/window.rs:476 src/session/sidebar/row.rs:703
+#: src/window.rs:473 src/session/sidebar/row.rs:705
 msgid "Voice message"
 msgstr ""
 
-#: src/window.rs:484 src/session/sidebar/row.rs:551
+#: src/window.rs:482 src/session/sidebar/row.rs:552
 msgid "Channel photo removed"
 msgstr ""
 
-#: src/window.rs:487 src/session/sidebar/row.rs:554
+#: src/window.rs:486 src/session/sidebar/row.rs:556
 msgid "You removed the group photo"
 msgstr ""
 
-#: src/window.rs:497 src/session/sidebar/row.rs:567
-#: src/session/sidebar/row.rs:635
+#: src/window.rs:496 src/session/sidebar/row.rs:569
+#: src/session/sidebar/row.rs:637
 msgid "Unsupported message"
 msgstr "සහාය නොදක්වන පණිවිඩයකි"
 
@@ -300,16 +300,16 @@ msgid "Unsupported draft message type"
 msgstr ""
 
 #. Translators: This is a date format in the day divider without the year
-#: src/session/content/item_row.rs:111
+#: src/session/content/item_row.rs:114
 msgid "%B %e"
 msgstr "%B %e"
 
 #. Translators: This is a date format in the day divider with the year
-#: src/session/content/item_row.rs:114
+#: src/session/content/item_row.rs:117
 msgid "%B %e, %Y"
 msgstr "%Y %B %e"
 
-#: src/session/content/message_row/text.rs:163
+#: src/session/content/message_row/text.rs:164
 msgid "This message is unsupported"
 msgstr "මෙම පණිවිඩයට සහාය නොදක්වයි"
 
@@ -359,28 +359,22 @@ msgstr ""
 msgid "Missed call"
 msgstr ""
 
-#: src/session/sidebar/row.rs:572
+#: src/session/sidebar/row.rs:574
 msgid "You"
 msgstr "ඔබ"
 
-#: src/session/sidebar/row.rs:597
+#: src/session/sidebar/row.rs:599
 msgid "Outgoing video call"
 msgstr ""
 
-#: src/session/sidebar/row.rs:599
+#: src/session/sidebar/row.rs:601
 msgid "Outgoing call"
 msgstr ""
 
-#: src/session/sidebar/row.rs:611
+#: src/session/sidebar/row.rs:613
 msgid "Incoming video call"
 msgstr ""
 
-#: src/session/sidebar/row.rs:626
+#: src/session/sidebar/row.rs:628
 msgid "Document"
 msgstr ""
-
-#~ msgid "Do You Accept the Terms of Service?"
-#~ msgstr "ඔබ සේවාවේ නියම පිළිගන්නවාද?"
-
-#~ msgid "Terms of Service"
-#~ msgstr "සේවාවේ නියම"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: telegrand\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-08 19:44+0200\n"
+"POT-Creation-Date: 2022-01-07 00:12+0100\n"
 "PO-Revision-Date: 2022-01-02 09:54+0000\n"
 "Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -45,6 +45,7 @@ msgid "Default window height"
 msgstr "默认窗口宽度"
 
 #: data/com.github.melix99.telegrand.gschema.xml.in:16
+#: data/com.github.melix99.telegrand.gschema.xml.in:17
 msgid "Default window maximized behaviour"
 msgstr "默认窗口最大化行为"
 
@@ -53,85 +54,171 @@ msgstr "默认窗口最大化行为"
 msgid "Use Telegram's test data center"
 msgstr "使用 Telegram 的测试数据中心"
 
+#: data/com.github.melix99.telegrand.gschema.xml.in:31
+#: data/resources/ui/preferences-window.ui:9
+msgid "Color Scheme"
+msgstr ""
+
+#: data/com.github.melix99.telegrand.gschema.xml.in:32
+msgid "The color scheme to be used in the app"
+msgstr ""
+
 #: data/com.github.melix99.telegrand.metainfo.xml.in.in:15
 msgid "Main window"
 msgstr "主窗口"
 
-#: data/com.github.melix99.telegrand.metainfo.xml.in.in:32
+#: data/com.github.melix99.telegrand.metainfo.xml.in.in:40
 msgid "Marco Melorio"
 msgstr "Marco Melorio"
 
-#: data/resources/ui/content.ui:22
+#: data/resources/ui/content.ui:23
 msgid "No Chat Selected"
 msgstr "未选中对话"
 
-#: data/resources/ui/content.ui:23
+#: data/resources/ui/content.ui:24
 msgid "Select a chat to start messaging."
 msgstr "请选择一个对话开始聊天。"
 
-#: data/resources/ui/login.ui:14
+#: data/resources/ui/content-chat-history.ui:94
+msgid "View Info"
+msgstr ""
+
+#: data/resources/ui/content-user-dialog.ui:52
+msgid "Mobile"
+msgstr ""
+
+#: data/resources/ui/content-user-dialog.ui:58
+msgid "Username"
+msgstr ""
+
+#: data/resources/ui/login.ui:40
 msgid "_Previous"
 msgstr "上一个(_P)"
 
-#: data/resources/ui/login.ui:25
+#: data/resources/ui/login.ui:69
 msgid "_Next"
 msgstr "下一个(_N)"
 
-#: data/resources/ui/login.ui:55
+#: data/resources/ui/login.ui:98
 msgid "Welcome to Telegrand"
 msgstr "欢迎使用 Telegrand"
 
-#: data/resources/ui/login.ui:74
+#: data/resources/ui/login.ui:117
 msgid "Phone Number"
 msgstr "电话号码"
 
-#: data/resources/ui/login.ui:95
+#: data/resources/ui/login.ui:139
+msgid "_Log in using QR code"
+msgstr ""
+
+#: data/resources/ui/login.ui:177
 msgid "Advanced"
 msgstr "高级"
 
-#: data/resources/ui/login.ui:98 data/resources/ui/login.ui:280
-msgid "Encryption Key"
-msgstr "密钥"
-
-#: data/resources/ui/login.ui:110
+#: data/resources/ui/login.ui:181
 msgid "Use Test Data Center"
 msgstr "使用测试数据中心"
 
-#: data/resources/ui/login.ui:111
+#: data/resources/ui/login.ui:182
 msgid "This requires a restart to apply"
 msgstr "此操作需要重启才能应用"
 
-#: data/resources/ui/login.ui:149
+#: data/resources/ui/login.ui:218
+#, fuzzy
+msgid "Scan Code"
+msgstr "代码"
+
+#: data/resources/ui/login.ui:219
+msgid "Scan this code with another Telegram app logged into your account."
+msgstr ""
+
+#: data/resources/ui/login.ui:253
 msgid "Enter the Verification Code"
 msgstr "输入验证码"
 
-#: data/resources/ui/login.ui:168
+#: data/resources/ui/login.ui:272 data/resources/ui/login.ui:685
 msgid "Code"
 msgstr "代码"
 
-#: data/resources/ui/login.ui:205
+#: data/resources/ui/login.ui:311
 msgid "Register New Account"
 msgstr "注册新帐户"
 
-#: data/resources/ui/login.ui:225
+#: data/resources/ui/login.ui:331
 msgid "First Name"
 msgstr "名字"
 
-#: data/resources/ui/login.ui:242
+#: data/resources/ui/login.ui:348
 msgid "Last Name"
 msgstr "姓氏"
 
-#: data/resources/ui/login.ui:205
+#: data/resources/ui/login.ui:387
+msgid ""
+"By signing up,\n"
+"you agree to the <a href=\"\">Terms of Service</a>."
+msgstr ""
+"要通过注册，\n"
+"需要你同意<a href=\"\">服务条款</a>。"
+
+#: data/resources/ui/login.ui:403
 msgid "Enter Your Password"
 msgstr "输入你的密码"
 
-#: data/resources/ui/login.ui:224
+#: data/resources/ui/login.ui:422
 msgid "Password"
 msgstr "密码"
 
-#: data/resources/ui/login.ui:261
-msgid "Enter the Encryption Key"
-msgstr "输入密钥"
+#: data/resources/ui/login.ui:437
+msgid "Hint"
+msgstr ""
+
+#: data/resources/ui/login.ui:460
+msgid "_Forgot password?"
+msgstr ""
+
+#: data/resources/ui/login.ui:523
+msgid "Use Recovery Code"
+msgstr ""
+
+#: data/resources/ui/login.ui:536
+msgid ""
+"When you set your cloud password, you provided a recovery email address. We "
+"can send you a code to this email address that you can use to reset your "
+"password."
+msgstr ""
+
+#: data/resources/ui/login.ui:555
+msgid "_Send recovery code"
+msgstr ""
+
+#: data/resources/ui/login.ui:617
+msgid "Account Deletion"
+msgstr ""
+
+#: data/resources/ui/login.ui:644
+#, fuzzy
+msgid "_Delete Account"
+msgstr "注册新帐户"
+
+#: data/resources/ui/login.ui:666
+msgid "Enter the Code Sent by E-Mail"
+msgstr ""
+
+#: data/resources/ui/login.ui:707
+msgid "_Unable to access your email?"
+msgstr ""
+
+#: data/resources/ui/preferences-window.ui:6
+msgid "Appearance"
+msgstr ""
+
+#: data/resources/ui/preferences-window.ui:12
+msgid "Follow System Colors"
+msgstr ""
+
+#: data/resources/ui/preferences-window.ui:23
+msgid "Dark Theme"
+msgstr ""
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -148,81 +235,154 @@ msgctxt "shortcut window"
 msgid "Quit"
 msgstr "退出"
 
+#: data/resources/ui/shortcuts.ui:28
+msgctxt "shortcut window"
+msgid "Chat List"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:31
+msgctxt "shortcut window"
+msgid "Search Chats"
+msgstr ""
+
 #: data/resources/ui/sidebar.ui:6
 msgid "_Log Out"
 msgstr "登出(_L)"
 
 #: data/resources/ui/sidebar.ui:12
+msgid "_Preferences"
+msgstr ""
+
+#: data/resources/ui/sidebar.ui:16
 msgid "_Keyboard Shortcuts"
 msgstr "快捷键(_K)"
 
-#: data/resources/ui/sidebar.ui:16
+#: data/resources/ui/sidebar.ui:20
 msgid "_About Telegrand"
 msgstr "关于 Telgrand(_A)"
 
-#: src/window.rs:45 src/session/sidebar/chat_row.rs:240
-msgid "Photo"
-msgstr "照片"
-
-#: src/window.rs:64 src/session/sidebar/chat_row.rs:259
-msgid "GIF"
-msgstr "GIF"
-
-#: src/window.rs:73 src/session/sidebar/chat_row.rs:268
-msgid "Video"
-msgstr "视频"
-
-#: src/window.rs::91 src/session/sidebar/chat_row.rs:286
-msgid "Voice message"
-msgstr "语音消息"
-
-#. Translators: '{}' is the placeholder for the full name of the contact who joined Telegram
-#: src/window.rs::110 src/session/sidebar/chat_row.rs:311
-msgid "{} joined Telegram"
-msgstr "{} 已加入 Telegram"
-
-#: src/window.rs:112 src/session/sidebar/chat_row.rs:313
-msgid "Unsupported message"
-msgstr "不支持的消息"
-
-#: src/window.rs:409
+#: src/window.rs:331 src/session/sidebar/row.rs:615
 msgid "Incoming call"
 msgstr "来电"
 
+#: src/window.rs:423 src/session/sidebar/row.rs:500
+#: src/session/sidebar/row.rs:631
+msgid "Sticker"
+msgstr ""
+
+#: src/window.rs:427 src/session/sidebar/row.rs:681
+msgid "Photo"
+msgstr "照片"
+
+#: src/window.rs:446 src/session/sidebar/row.rs:644
+msgid "GIF"
+msgstr "GIF"
+
+#: src/window.rs:455 src/session/sidebar/row.rs:693
+msgid "Video"
+msgstr "视频"
+
+#: src/window.rs:473 src/session/sidebar/row.rs:705
+msgid "Voice message"
+msgstr "语音消息"
+
+#: src/window.rs:482 src/session/sidebar/row.rs:552
+msgid "Channel photo removed"
+msgstr ""
+
+#: src/window.rs:486 src/session/sidebar/row.rs:556
+msgid "You removed the group photo"
+msgstr ""
+
+#: src/window.rs:496 src/session/sidebar/row.rs:569
+#: src/session/sidebar/row.rs:637
+msgid "Unsupported message"
+msgstr "不支持的消息"
+
+#: src/session/content/chat_action_bar.rs:231
+#, fuzzy
+msgid "Unsupported draft message type"
+msgstr "不支持的消息"
+
 #. Translators: This is a date format in the day divider without the year
-#: src/session/content/item_row.rs:104
+#: src/session/content/item_row.rs:114
 msgid "%B %e"
 msgstr "%-m月%-d日"
 
 #. Translators: This is a date format in the day divider with the year
-#: src/session/content/item_row.rs:107
+#: src/session/content/item_row.rs:117
 msgid "%B %e, %Y"
 msgstr "%Y年%-m月%-d日"
 
-#: src/session/content/message_row.rs:95
+#: src/session/content/message_row/text.rs:164
 msgid "This message is unsupported"
 msgstr "此消息不受支持"
 
-#: src/session/sidebar/chat_row.rs:318
+#. Show the time
+#. Translators: This is a time format for the chat list without seconds
+#: src/session/sidebar/row.rs:230
+msgid "%l:%M %p"
+msgstr ""
+
+#: src/session/sidebar/row.rs:266
+msgid "Draft"
+msgstr ""
+
+#: src/session/sidebar/row.rs:438
+msgid "You joined the group"
+msgstr ""
+
+#: src/session/sidebar/row.rs:463
+msgid ", "
+msgstr ""
+
+#: src/session/sidebar/row.rs:480
+msgid "You left the group"
+msgstr ""
+
+#: src/session/sidebar/row.rs:520
+msgid "Declined outgoing video call"
+msgstr ""
+
+#: src/session/sidebar/row.rs:522
+msgid "Declined outgoing call"
+msgstr ""
+
+#: src/session/sidebar/row.rs:528
+msgid "Declined incoming video call"
+msgstr ""
+
+#: src/session/sidebar/row.rs:530
+#, fuzzy
+msgid "Declined incoming call"
+msgstr "来电"
+
+#: src/session/sidebar/row.rs:540
+msgid "Cancelled call"
+msgstr ""
+
+#: src/session/sidebar/row.rs:542
+msgid "Missed call"
+msgstr ""
+
+#: src/session/sidebar/row.rs:574
 msgid "You"
 msgstr "你"
 
-#. Translators: This is the hint that is shown to the user on the registratian page.
-#. Translators: Ideally, it consist of 2 lines but it may need more in order to be not ellipsized.
-#. Translators: Insert a '\n' in the text to produce a line break.
-#. Translators: The text 'Terms of Service' within the tag '<a href=\"\">Terms of Service</a>' is
-#. Translators: displayed as a clickable link. Please translate the text within the tags and take
-#. Translators: care of keeping the link intact.
-#: data/resources/ui/login.ui:281
-msgid "By signing up,\nyou agree to the <a href=\"\">Terms of Service</a>."
+#: src/session/sidebar/row.rs:599
+msgid "Outgoing video call"
 msgstr ""
-"要通过注册，\n"
-"需要你同意<a href=\"\">服务条款</a>。"
 
-#: src/login.rs:251
-msgid "Do You Accept the Terms of Service?"
-msgstr "你接受此服务条款吗？"
+#: src/session/sidebar/row.rs:601
+#, fuzzy
+msgid "Outgoing call"
+msgstr "来电"
 
-#: src/login.rs:255
-msgid "Terms of Service"
-msgstr "服务条款"
+#: src/session/sidebar/row.rs:613
+#, fuzzy
+msgid "Incoming video call"
+msgstr "来电"
+
+#: src/session/sidebar/row.rs:628
+msgid "Document"
+msgstr ""

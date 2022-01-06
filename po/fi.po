@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: telegrand\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-03 22:56+0100\n"
+"POT-Creation-Date: 2022-01-07 00:12+0100\n"
 "PO-Revision-Date: 2022-01-05 21:54+0000\n"
 "Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/telegrand/"
@@ -264,41 +264,41 @@ msgstr "_Näppäimistön pikavalinnat"
 msgid "_About Telegrand"
 msgstr "_Tietoja Telegrandista"
 
-#: src/window.rs:334 src/session/sidebar/row.rs:613
+#: src/window.rs:331 src/session/sidebar/row.rs:615
 msgid "Incoming call"
 msgstr "Saapuva puhelu"
 
-#: src/window.rs:426 src/session/sidebar/row.rs:500
-#: src/session/sidebar/row.rs:629
+#: src/window.rs:423 src/session/sidebar/row.rs:500
+#: src/session/sidebar/row.rs:631
 msgid "Sticker"
 msgstr "Tarra"
 
-#: src/window.rs:430 src/session/sidebar/row.rs:679
+#: src/window.rs:427 src/session/sidebar/row.rs:681
 msgid "Photo"
 msgstr "Valokuva"
 
-#: src/window.rs:449 src/session/sidebar/row.rs:642
+#: src/window.rs:446 src/session/sidebar/row.rs:644
 msgid "GIF"
 msgstr "GIF"
 
-#: src/window.rs:458 src/session/sidebar/row.rs:691
+#: src/window.rs:455 src/session/sidebar/row.rs:693
 msgid "Video"
 msgstr "Video"
 
-#: src/window.rs:476 src/session/sidebar/row.rs:703
+#: src/window.rs:473 src/session/sidebar/row.rs:705
 msgid "Voice message"
 msgstr "Ääniviesti"
 
-#: src/window.rs:484 src/session/sidebar/row.rs:551
+#: src/window.rs:482 src/session/sidebar/row.rs:552
 msgid "Channel photo removed"
 msgstr "Kanavan kuva poistettu"
 
-#: src/window.rs:487 src/session/sidebar/row.rs:554
+#: src/window.rs:486 src/session/sidebar/row.rs:556
 msgid "You removed the group photo"
 msgstr "Sinä poistit ryhmäkuvan"
 
-#: src/window.rs:497 src/session/sidebar/row.rs:567
-#: src/session/sidebar/row.rs:635
+#: src/window.rs:496 src/session/sidebar/row.rs:569
+#: src/session/sidebar/row.rs:637
 msgid "Unsupported message"
 msgstr "Ei tuettu viesti"
 
@@ -307,16 +307,16 @@ msgid "Unsupported draft message type"
 msgstr "Ei tuettu sanomaluonnoksen tyyppi"
 
 #. Translators: This is a date format in the day divider without the year
-#: src/session/content/item_row.rs:111
+#: src/session/content/item_row.rs:114
 msgid "%B %e"
 msgstr "%e %B"
 
 #. Translators: This is a date format in the day divider with the year
-#: src/session/content/item_row.rs:114
+#: src/session/content/item_row.rs:117
 msgid "%B %e, %Y"
 msgstr "%e %B %Y"
 
-#: src/session/content/message_row/text.rs:163
+#: src/session/content/message_row/text.rs:164
 msgid "This message is unsupported"
 msgstr "Tätä viestiä ei tueta"
 
@@ -366,32 +366,22 @@ msgstr "Puhelu peruutettu"
 msgid "Missed call"
 msgstr "Vastaamatta jäänyt puhelu"
 
-#: src/session/sidebar/row.rs:572
+#: src/session/sidebar/row.rs:574
 msgid "You"
 msgstr "Sinä"
 
-#: src/session/sidebar/row.rs:597
+#: src/session/sidebar/row.rs:599
 msgid "Outgoing video call"
 msgstr "Lähtevä videopuhelu"
 
-#: src/session/sidebar/row.rs:599
+#: src/session/sidebar/row.rs:601
 msgid "Outgoing call"
 msgstr "Lähtevä puhelu"
 
-#: src/session/sidebar/row.rs:611
+#: src/session/sidebar/row.rs:613
 msgid "Incoming video call"
 msgstr "Saapuva videopuhelu"
 
-#: src/session/sidebar/row.rs:626
+#: src/session/sidebar/row.rs:628
 msgid "Document"
 msgstr "Asiakirja"
-
-#: data/resources/ui/login.ui:666
-msgid "Enter the Code Sent by Mail"
-msgstr "Kirjoita sähköpostitse lähetetty koodi"
-
-#~ msgid "Encryption Key"
-#~ msgstr "Salausavain"
-
-#~ msgid "Enter the Encryption Key"
-#~ msgstr "Syötä salausavain"
