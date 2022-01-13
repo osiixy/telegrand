@@ -533,12 +533,7 @@ impl Login {
         let client_id = imp.client_id.get();
         do_async(
             glib::PRIORITY_DEFAULT_IDLE,
-            async move {
-                functions::RequestQrCodeAuthentication::new()
-                    .other_user_ids(other_user_ids)
-                    .send(client_id)
-                    .await
-            },
+            functions::request_qr_code_authentication(other_user_ids, client_id),
             clone!(@weak self as obj => move |result| async move {
                 let imp = obj.imp();
                 obj.handle_user_result(
@@ -643,12 +638,7 @@ impl Login {
         let encryption_key = "".to_string();
         do_async(
             glib::PRIORITY_DEFAULT_IDLE,
-            async move {
-                functions::CheckDatabaseEncryptionKey::new()
-                    .encryption_key(encryption_key)
-                    .send(client_id)
-                    .await
-            },
+            functions::check_database_encryption_key(encryption_key, client_id),
             clone!(@weak self as obj => move |result| async move {
                 if let Err(err) = result {
                     show_error_label(
@@ -699,12 +689,11 @@ impl Login {
             None => {
                 do_async(
                     glib::PRIORITY_DEFAULT_IDLE,
-                    async move {
-                        functions::SetAuthenticationPhoneNumber::new()
-                            .phone_number(phone_number.into())
-                            .send(client_id)
-                            .await
-                    },
+                    functions::set_authentication_phone_number(
+                        phone_number.into(),
+                        None,
+                        client_id,
+                    ),
                     clone!(@weak self as obj => move |result| async move {
                         let imp = obj.imp();
                         obj.handle_user_result(
@@ -727,12 +716,7 @@ impl Login {
         let code = imp.code_entry.text().to_string();
         do_async(
             glib::PRIORITY_DEFAULT_IDLE,
-            async move {
-                functions::CheckAuthenticationCode::new()
-                    .code(code)
-                    .send(client_id)
-                    .await
-            },
+            functions::check_authentication_code(code, client_id),
             clone!(@weak self as obj => move |result| async move {
                 let imp = obj.imp();
                 obj.handle_user_result(result, &imp.code_error_label, &*imp.code_entry);
@@ -750,13 +734,7 @@ impl Login {
         let last_name = imp.registration_last_name_entry.text().to_string();
         do_async(
             glib::PRIORITY_DEFAULT_IDLE,
-            async move {
-                functions::RegisterUser::new()
-                    .first_name(first_name)
-                    .last_name(last_name)
-                    .send(client_id)
-                    .await
-            },
+            functions::register_user(first_name, last_name, client_id),
             clone!(@weak self as obj => move |result| async move {
                 let imp = obj.imp();
                 obj.handle_user_result(
@@ -777,12 +755,7 @@ impl Login {
         let password = imp.password_entry.text().to_string();
         do_async(
             glib::PRIORITY_DEFAULT_IDLE,
-            async move {
-                functions::CheckAuthenticationPassword::new()
-                    .password(password)
-                    .send(client_id)
-                    .await
-            },
+            functions::check_authentication_password(password, client_id),
             clone!(@weak self as obj => move |result| async move {
                 let imp = obj.imp();
                 obj.handle_user_result(
@@ -806,11 +779,7 @@ impl Login {
             let client_id = imp.client_id.get();
             do_async(
                 glib::PRIORITY_DEFAULT_IDLE,
-                async move {
-                    functions::RequestAuthenticationPasswordRecovery::new()
-                        .send(client_id)
-                        .await
-                },
+                functions::request_authentication_password_recovery(client_id),
                 clone!(@weak self as obj => move |result| async move {
                     let imp = obj.imp();
 
@@ -876,12 +845,7 @@ impl Login {
                 let client_id = obj.imp().client_id.get();
                 do_async(
                     glib::PRIORITY_DEFAULT_IDLE,
-                    async move {
-                        functions::DeleteAccount::new()
-                            .reason(String::from("cloud password lost and not recoverable"))
-                            .send(client_id)
-                            .await
-                    },
+                    functions::delete_account(String::from("cloud password lost and not recoverable"), client_id),
                     clone!(@weak obj => move |result| async move {
                         // Just unfreeze in case of an error, else stay frozen until we are
                         // redirected to the welcome page.
@@ -907,12 +871,12 @@ impl Login {
         let recovery_code = imp.password_recovery_code_entry.text().to_string();
         do_async(
             glib::PRIORITY_DEFAULT_IDLE,
-            async move {
-                functions::RecoverAuthenticationPassword::new()
-                    .recovery_code(recovery_code)
-                    .send(client_id)
-                    .await
-            },
+            functions::recover_authentication_password(
+                recovery_code,
+                String::new(),
+                String::new(),
+                client_id,
+            ),
             clone!(@weak self as obj => move |result| async move {
                 let imp = obj.imp();
 

@@ -164,8 +164,8 @@ impl ChatActionBar {
         };
         let content = types::InputMessageText {
             text,
+            disable_web_page_preview: false,
             clear_draft: true,
-            ..Default::default()
         };
 
         InputMessageContent::InputMessageText(content)
@@ -178,14 +178,9 @@ impl ChatActionBar {
             let chat_id = chat.id();
 
             // Send the message
-            RUNTIME.spawn(async move {
-                functions::SendMessage::new()
-                    .chat_id(chat_id)
-                    .input_message_content(message)
-                    .send(client_id)
-                    .await
-                    .unwrap();
-            });
+            RUNTIME.spawn(functions::send_message(
+                chat_id, 0, 0, None, message, client_id,
+            ));
 
             // Reset message entry
             self.imp().message_entry.buffer().set_text("");
@@ -196,21 +191,20 @@ impl ChatActionBar {
         if let Some(chat) = self.chat() {
             let message = self.compose_text_message();
             let draft_message = types::DraftMessage {
+                reply_to_message_id: 0,
+                date: 0,
                 input_message_text: message,
-                ..Default::default()
             };
             let client_id = chat.session().client_id();
             let chat_id = chat.id();
 
             // Save draft message
-            RUNTIME.spawn(async move {
-                functions::SetChatDraftMessage::new()
-                    .chat_id(chat_id)
-                    .draft_message(draft_message)
-                    .send(client_id)
-                    .await
-                    .unwrap();
-            });
+            RUNTIME.spawn(functions::set_chat_draft_message(
+                chat_id,
+                0,
+                Some(draft_message),
+                client_id,
+            ));
         }
     }
 
@@ -251,13 +245,7 @@ impl ChatActionBar {
             // Send typing action
             do_async(
                 glib::PRIORITY_DEFAULT_IDLE,
-                async move {
-                    functions::SendChatAction::new()
-                        .chat_id(chat_id)
-                        .action(action)
-                        .send(client_id)
-                        .await
-                },
+                functions::send_chat_action(chat_id, 0, Some(action), client_id),
                 clone!(@weak self as obj => move |result| async move {
                     // If the request is successful, then start the actual cooldown of 5 seconds.
                     // Otherwise just cancel it right away.

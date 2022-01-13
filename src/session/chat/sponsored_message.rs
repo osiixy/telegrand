@@ -1,5 +1,5 @@
 use gtk::{glib, prelude::*, subclass::prelude::*};
-use tdgrand::{enums, functions::GetChatSponsoredMessage, types::Error as TdError};
+use tdgrand::{enums, functions, types::Error as TdError};
 
 use crate::session::{chat::BoxedMessageContent, Chat};
 use crate::Session;
@@ -88,10 +88,7 @@ glib::wrapper! {
 impl SponsoredMessage {
     pub async fn request(chat_id: i64, session: &Session) -> Result<Self, TdError> {
         let enums::SponsoredMessage::SponsoredMessage(sponsored_message) =
-            GetChatSponsoredMessage::new()
-                .chat_id(chat_id)
-                .send(session.client_id())
-                .await?;
+            functions::get_chat_sponsored_message(chat_id, session.client_id()).await?;
 
         let content = BoxedMessageContent(sponsored_message.content);
         let sponsor_chat = session.chat_list().get(sponsored_message.sponsor_chat_id);
