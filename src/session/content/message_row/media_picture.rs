@@ -1,3 +1,4 @@
+use glib::clone;
 use gtk::{gdk, glib, graphene, prelude::*, subclass::prelude::*};
 
 const MIN_WIDTH: i32 = 100;
@@ -13,6 +14,7 @@ mod imp {
     pub struct MediaPicture {
         pub paintable: RefCell<Option<gdk::Paintable>>,
         pub aspect_ratio: Cell<f64>,
+        pub handler_id: RefCell<Option<glib::SignalHandlerId>>,
     }
 
     #[glib::object_subclass]
@@ -160,7 +162,21 @@ impl MediaPicture {
             return;
         }
 
-        self.imp().paintable.replace(paintable);
+        let imp = self.imp();
+        if let Some(old_paintable) = imp.paintable.borrow().as_ref() {
+            old_paintable.disconnect(imp.handler_id.take().unwrap());
+        }
+
+        imp.paintable.replace(paintable);
+
+        if let Some(paintable) = imp.paintable.borrow().as_ref() {
+            let handler_id =
+                paintable.connect_invalidate_contents(clone!(@weak self as obj => move |_| {
+                    obj.queue_draw();
+                }));
+            imp.handler_id.replace(Some(handler_id));
+        }
+
         self.queue_draw();
 
         self.notify("paintable");

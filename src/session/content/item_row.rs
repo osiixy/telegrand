@@ -97,7 +97,8 @@ impl ItemRow {
                         let message = message.to_owned().upcast();
 
                         match content {
-                            MessageContent::MessagePhoto(_) => {
+                            MessageContent::MessageAnimation(_)
+                            | MessageContent::MessagePhoto(_) => {
                                 self.set_child_row::<MessageMedia>(message)
                             }
                             MessageContent::MessageSticker(data) if !data.sticker.is_animated => {

@@ -49,6 +49,8 @@ The following packages are required to build Telegrand:
 - TDLib 1.8.0
 - [Telegram API Credentials](https://my.telegram.org/) (optional, but recommended)
 
+Also, Telegrand requires the Libav GStreamer plugin installed in your system to correctly show media files.
+
 #### Instructions
 
 ```shell

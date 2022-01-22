@@ -56,14 +56,9 @@ impl MessageMedia {
     fn update_widget(&self) {
         let imp = self.imp();
 
-        if let Some(binding) = imp.binding.take() {
-            binding.unwatch();
-        }
-
         if let Some(old_message) = imp.old_message.upgrade() {
-            if let Some(id) = imp.handler_id.take() {
-                old_message.disconnect(id);
-            }
+            old_message.disconnect(imp.handler_id.take().unwrap());
+            imp.binding.take().unwrap().unwatch();
         }
 
         if let Some(message) = self.message() {
@@ -72,11 +67,11 @@ impl MessageMedia {
             // Setup caption expression
             let caption_binding = Message::this_expression("content")
                 .chain_closure::<String>(closure!(|_: Message, content: BoxedMessageContent| {
-                    if let MessageContent::MessagePhoto(data) = content.0 {
-                        parse_formatted_text(data.caption)
-                    } else {
-                        unreachable!();
-                    }
+                    parse_formatted_text(match content.0 {
+                        MessageContent::MessageAnimation(data) => data.caption,
+                        MessageContent::MessagePhoto(data) => data.caption,
+                        _ => unreachable!(),
+                    })
                 }))
                 .bind(&*imp.content, "caption", Some(message));
             imp.binding.replace(Some(caption_binding));
@@ -94,23 +89,33 @@ impl MessageMedia {
     }
 
     fn update_media(&self, message: &Message) {
-        if let MessageContent::MessagePhoto(data) = message.content().0 {
-            if let Some(photo_size) = data.photo.sizes.last() {
-                let imp = self.imp();
+        let imp = self.imp();
 
-                // Reset media widget
-                imp.content.set_paintable(None);
+        imp.content.set_paintable(None);
+
+        let message_content = message.content().0;
+        let file = match message_content {
+            MessageContent::MessageAnimation(ref data) => {
+                imp.content
+                    .set_aspect_ratio(data.animation.width as f64 / data.animation.height as f64);
+
+                &data.animation.animation
+            }
+            MessageContent::MessagePhoto(ref data) => {
+                let photo_size = data.photo.sizes.last().unwrap();
                 imp.content
                     .set_aspect_ratio(photo_size.width as f64 / photo_size.height as f64);
-
-                if photo_size.photo.local.is_downloading_completed {
-                    imp.content.set_download_progress(1.0);
-                    self.load_media_from_path(&photo_size.photo.local.path);
-                } else {
-                    imp.content.set_download_progress(0.0);
-                    self.download_media(photo_size.photo.id, &message.chat().session());
-                }
+                &photo_size.photo
             }
+            _ => unreachable!(),
+        };
+
+        if file.local.is_downloading_completed {
+            imp.content.set_download_progress(1.0);
+            self.load_media_from_path(&file.local.path);
+        } else {
+            imp.content.set_download_progress(0.0);
+            self.download_media(file.id, &message.chat().session());
         }
     }
 
@@ -136,11 +141,23 @@ impl MessageMedia {
     }
 
     fn load_media_from_path(&self, path: &str) {
-        // TODO: Consider changing this to use an async api when
-        // https://github.com/gtk-rs/gtk4-rs/pull/777 is merged
-        let file = gio::File::for_path(path);
-        self.imp()
-            .content
-            .set_paintable(Some(gdk::Texture::from_file(&file).unwrap().upcast()));
+        if let Some(message) = self.message() {
+            let message = message.downcast_ref::<Message>().unwrap();
+            self.imp().content.set_paintable(match message.content().0 {
+                MessageContent::MessageAnimation(_) => {
+                    let media_file = gtk::MediaFile::for_filename(&path);
+                    media_file.set_loop(true);
+                    media_file.play();
+                    Some(media_file.upcast())
+                }
+                MessageContent::MessagePhoto(_) => {
+                    // TODO: Consider changing this to use an async api when
+                    // https://github.com/gtk-rs/gtk4-rs/pull/777 is merged
+                    let file = gio::File::for_path(path);
+                    Some(gdk::Texture::from_file(&file).unwrap().upcast())
+                }
+                _ => unreachable!(),
+            });
+        }
     }
 }
