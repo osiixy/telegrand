@@ -121,6 +121,7 @@ impl History {
             .list
             .borrow()
             .iter()
+            .rev()
             .find_map(|item| item.message())
             .map(|m| m.id())
             .unwrap_or_default();
@@ -140,7 +141,7 @@ impl History {
             clone!(@weak self as obj => move |result| async move {
                 if let Ok(enums::Messages::Messages(result)) = result {
                     if let Some(messages) = result.messages {
-                        obj.prepend(messages);
+                        obj.append(messages);
                     }
                 }
 
@@ -159,7 +160,7 @@ impl History {
 
         match update {
             Update::NewMessage(update) => {
-                self.append(update.message);
+                self.push_front(update.message);
             }
             Update::MessageSendSucceeded(update) => {
                 self.remove(update.old_message_id);
@@ -180,108 +181,108 @@ impl History {
         }
     }
 
-    fn items_changed(&self, position: u32, removed: u32, added: u32) {
-        let imp = self.imp();
+    // fn items_changed(&self, position: u32, removed: u32, added: u32) {
+    //     let imp = self.imp();
 
-        // Insert day dividers where needed
-        let added = {
-            let position = position as usize;
-            let added = added as usize;
+    // Insert day dividers where needed
+    //     let added = {
+    //         let position = position as usize;
+    //         let added = added as usize;
 
-            let mut list = imp.list.borrow_mut();
-            let mut previous_timestamp = if position > 0 {
-                list.get(position - 1)
-                    .and_then(|item| item.message_timestamp())
-            } else {
-                None
-            };
-            let mut dividers: Vec<(usize, Item)> = vec![];
-            let mut index = position;
+    //         let mut list = imp.list.borrow_mut();
+    //         let mut previous_timestamp = if position > 0 {
+    //             list.get(position - 1)
+    //                 .and_then(|item| item.message_timestamp())
+    //         } else {
+    //             None
+    //         };
+    //         let mut dividers: Vec<(usize, Item)> = vec![];
+    //         let mut index = position;
 
-            for current in list.range(position..position + added) {
-                if let Some(current_timestamp) = current.message_timestamp() {
-                    if Some(current_timestamp.ymd()) != previous_timestamp.as_ref().map(|t| t.ymd())
-                    {
-                        dividers.push((index, Item::for_day_divider(current_timestamp.clone())));
-                        previous_timestamp = Some(current_timestamp);
-                        index += 1;
-                    }
-                }
-                index += 1;
-            }
+    //         for current in list.range(position..position + added) {
+    //             if let Some(current_timestamp) = current.message_timestamp() {
+    //                 if Some(current_timestamp.ymd()) != previous_timestamp.as_ref().map(|t| t.ymd())
+    //                 {
+    //                     dividers.push((index, Item::for_day_divider(current_timestamp.clone())));
+    //                     previous_timestamp = Some(current_timestamp);
+    //                     index += 1;
+    //                 }
+    //             }
+    //             index += 1;
+    //         }
 
-            let dividers_len = dividers.len();
-            for (position, item) in dividers {
-                list.insert(position, item);
-            }
+    //         let dividers_len = dividers.len();
+    //         for (position, item) in dividers {
+    //             list.insert(position, item);
+    //         }
 
-            (added + dividers_len) as u32
-        };
+    //         (added + dividers_len) as u32
+    //     };
 
-        // Check and remove no more needed day divider after removing messages
-        let (position, removed) = {
-            let mut position = position as usize;
-            let mut removed = removed as usize;
+    // Check and remove no more needed day divider after removing messages
+    //     let (position, removed) = {
+    //         let mut position = position as usize;
+    //         let mut removed = removed as usize;
 
-            if removed > 0 {
-                let mut list = imp.list.borrow_mut();
-                let previous_item = if position > 0 {
-                    list.get(position - 1)
-                } else {
-                    None
-                };
+    //         if removed > 0 {
+    //             let mut list = imp.list.borrow_mut();
+    //             let previous_item = if position > 0 {
+    //                 list.get(position - 1)
+    //             } else {
+    //                 None
+    //             };
 
-                if let Some(ItemType::DayDivider(_)) = previous_item.map(|item| item.type_()) {
-                    let item_after_removed = list.get(position + removed - 1);
+    //             if let Some(ItemType::DayDivider(_)) = previous_item.map(|item| item.type_()) {
+    //                 let item_after_removed = list.get(position + removed - 1);
 
-                    match item_after_removed.map(|item| item.type_()) {
-                        None | Some(ItemType::DayDivider(_)) => {
-                            list.remove(position - 1);
+    //                 match item_after_removed.map(|item| item.type_()) {
+    //                     None | Some(ItemType::DayDivider(_)) => {
+    //                         list.remove(position - 1);
 
-                            position -= 1;
-                            removed += 1;
-                        }
-                        _ => {}
-                    }
-                }
-            }
+    //                         position -= 1;
+    //                         removed += 1;
+    //                     }
+    //                     _ => {}
+    //                 }
+    //             }
+    //         }
 
-            (position as u32, removed as u32)
-        };
+    //         (position as u32, removed as u32)
+    //     };
 
-        // Check and remove no more needed day divider after adding messages
-        let removed = {
-            let mut removed = removed;
+    // Check and remove no more needed day divider after adding messages
+    //     let removed = {
+    //         let mut removed = removed;
 
-            if added > 0 {
-                let position = position as usize;
-                let added = added as usize;
+    //         if added > 0 {
+    //             let position = position as usize;
+    //             let added = added as usize;
 
-                let mut list = imp.list.borrow_mut();
-                let last_added_timestamp = list
-                    .get(position + added - 1)
-                    .unwrap()
-                    .message_timestamp()
-                    .unwrap();
-                let next_item = list.get(position + added);
+    //             let mut list = imp.list.borrow_mut();
+    //             let last_added_timestamp = list
+    //                 .get(position + added - 1)
+    //                 .unwrap()
+    //                 .message_timestamp()
+    //                 .unwrap();
+    //             let next_item = list.get(position + added);
 
-                if let Some(ItemType::DayDivider(date)) = next_item.map(|item| item.type_()) {
-                    if date.ymd() == last_added_timestamp.ymd() {
-                        list.remove(position + added);
+    //             if let Some(ItemType::DayDivider(date)) = next_item.map(|item| item.type_()) {
+    //                 if date.ymd() == last_added_timestamp.ymd() {
+    //                     list.remove(position + added);
 
-                        removed += 1;
-                    }
-                }
-            }
+    //                     removed += 1;
+    //                 }
+    //             }
+    //         }
 
-            removed
-        };
+    //         removed
+    //     };
 
-        self.upcast_ref::<gio::ListModel>()
-            .items_changed(position, removed, added);
-    }
+    //     self.upcast_ref::<gio::ListModel>()
+    //         .items_changed(position, removed, added);
+    // }
 
-    pub fn append(&self, message: TelegramMessage) {
+    pub fn push_front(&self, message: TelegramMessage) {
         let imp = self.imp();
 
         if let Entry::Vacant(entry) = imp.message_map.borrow_mut().entry(message.id) {
@@ -289,14 +290,13 @@ impl History {
 
             entry.insert(message.clone());
 
-            imp.list.borrow_mut().push_back(Item::for_message(message));
+            imp.list.borrow_mut().push_front(Item::for_message(message));
 
-            let index = imp.list.borrow().len() - 1;
-            self.items_changed(index as u32, 0, 1);
+            self.items_changed(0, 0, 1);
         }
     }
 
-    fn prepend(&self, messages: Vec<TelegramMessage>) {
+    fn append(&self, messages: Vec<TelegramMessage>) {
         let imp = self.imp();
         let chat = self.chat();
         let added = messages.len();
@@ -310,10 +310,11 @@ impl History {
                 .borrow_mut()
                 .insert(message.id(), message.clone());
 
-            imp.list.borrow_mut().push_front(Item::for_message(message));
+            imp.list.borrow_mut().push_back(Item::for_message(message));
         }
 
-        self.items_changed(0, 0, added as u32);
+        let index = imp.list.borrow().len() - added;
+        self.items_changed(index as u32, 0, added as u32);
     }
 
     fn remove(&self, message_id: i64) {
